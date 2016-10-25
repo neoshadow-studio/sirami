@@ -8,6 +8,7 @@ extends Reference
 
 
 
+
 ### @brief The clocks manager.
 ###
 var clocks
@@ -100,7 +101,7 @@ func process( ):
 			alive.emit_signal( "finished" )
 		
 		else:
-		
+			
 			alive._process( self )
 	
 	
@@ -109,4 +110,3 @@ func process( ):
 	for i in range( to_remove.size( ) ):
 		
 		alives.erase( to_remove[ i ] - i )
-		

@@ -8,6 +8,7 @@ extends Reference
 
 
 
+
 ### @brief Create a new instance from raw data.
 ###
 ### @param data : The raw data.
