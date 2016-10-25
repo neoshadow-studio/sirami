@@ -20,6 +20,8 @@ func _ready( ):
 	
 	clocks = { }
 	
+	add_clock( "default" )
+	
 	set_process( true )
 
 
