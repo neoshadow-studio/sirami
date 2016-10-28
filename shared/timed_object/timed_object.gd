@@ -7,6 +7,7 @@
 extends Reference
 
 
+const SpeedModifier = preload( "speed_modifier.gd" )
 
 
 ### @brief Create a new instance from raw data.
@@ -17,7 +18,9 @@ extends Reference
 ###
 static func from_data( data ):
 	
-	return null
+	if data.type == "speed-modifier":
+		
+		return SpeedModifier.from_data( data )
 
 
 
@@ -30,6 +33,9 @@ var start_time
 ###
 var duration
 
+### @brief The timed object will modify the speed ?
+###
+var modify_speed = false
 
 
 
