@@ -2,6 +2,10 @@
 extends Sprite
 
 
+
+onready var scene_switcher = get_node( "/root/scene_switcher" )
+
+
 var playfield
 
 
@@ -14,12 +18,15 @@ func initialize( pf ):
 	
 	playfield = pf
 	
-	if pf.track.files.background != "":
+	var bg = scene_switcher.get_transition_background( )
+	
+	if bg != null:
 		
-		set_texture( load( pf.track.base_dir + "/" + pf.track.files.background ) )
+		set_texture( bg )
 		
-		pf.connect( "resized", self, "on_playfield_resized" )
+		get_parent( ).connect( "resized", self, "on_playfield_resized" )
 		on_playfield_resized( )
+
 
 
 func on_playfield_resized( ):

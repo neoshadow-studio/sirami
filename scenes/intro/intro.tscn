@@ -1,0 +1,94 @@
+[gd_scene load_steps=10 format=1]
+
+[ext_resource path="res://scenes/intro/intro.gd" type="Script" id=1]
+[ext_resource path="res://resources/images/main_background.tex" type="Texture" id=2]
+[ext_resource path="res://scenes/intro/background.gd" type="Script" id=3]
+[ext_resource path="res://scenes/intro/sirami-logo.gd" type="Script" id=4]
+[ext_resource path="res://resources/images/sirami_background.tex" type="Texture" id=5]
+[ext_resource path="res://resources/images/sirami.tex" type="Texture" id=6]
+[ext_resource path="res://scenes/intro/sirami.gd" type="Script" id=7]
+[ext_resource path="res://resources/images/ns_logo.tex" type="Texture" id=8]
+
+[sub_resource type="Animation" id=1]
+
+resource/name = "intro"
+length = 4.0
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("sirami-logo:factor")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = { "times":FloatArray( 0.8, 1.7 ), "transitions":FloatArray( 0.25, 0.25 ), "update":0, "values":[ 0.0, 1.0 ] }
+tracks/1/type = "value"
+tracks/1/path = NodePath("sirami-logo/sirami:factor")
+tracks/1/interp = 1
+tracks/1/imported = false
+tracks/1/keys = { "times":FloatArray( 0.5, 1.5 ), "transitions":FloatArray( 0.120742, 0.25 ), "update":0, "values":[ 0, 1.0 ] }
+tracks/2/type = "value"
+tracks/2/path = NodePath("ns:visibility/self_opacity")
+tracks/2/interp = 1
+tracks/2/imported = false
+tracks/2/keys = { "times":FloatArray( 0, 1 ), "transitions":FloatArray( 1, 1 ), "update":0, "values":[ 0.0, 1.0 ] }
+
+[node name="intro" type="Container"]
+
+anchor/right = 1
+anchor/bottom = 1
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 0.0
+margin/bottom = 0.0
+script/script = ExtResource( 1 )
+
+[node name="background" type="Sprite" parent="."]
+
+visibility/behind_parent = true
+transform/pos = Vector2( -1.85059, -6.10352e-05 )
+texture = ExtResource( 2 )
+modulate = Color( 0.429688, 0.429688, 0.429688, 1 )
+script/script = ExtResource( 3 )
+
+[node name="sirami-logo" type="Sprite" parent="."]
+
+transform/pos = Vector2( 500, 300 )
+transform/rot = 90.0
+transform/scale = Vector2( 0.2, 0.2 )
+script/script = ExtResource( 4 )
+factor = 0
+bg_texture = ExtResource( 5 )
+
+[node name="sirami" type="Sprite" parent="sirami-logo"]
+
+transform/rot = -90.0
+transform/scale = Vector2( 2.5, 2.5 )
+texture = ExtResource( 6 )
+region = true
+script/script = ExtResource( 7 )
+factor = 0
+
+[node name="ns" type="Sprite" parent="."]
+
+transform/pos = Vector2( 500, 553.268 )
+transform/scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 8 )
+region_rect = Rect2( 0, 0, 720, 176 )
+
+[node name="anim" type="AnimationPlayer" parent="."]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+anims/intro = SubResource( 1 )
+playback/active = true
+playback/speed = 1.0
+blend_times = [  ]
+autoplay = "intro"
+
+[connection signal="finished" from="anim" to="." method="_on_anim_finished"]
+
+

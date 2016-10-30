@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://shared/scene_switcher/scene_switcher.gd" type="Script" id=1]
+
+[node name="scene_switcher" type="Node"]
+
+script/script = ExtResource( 1 )
+
+[node name="background" type="Sprite" parent="."]
+
+

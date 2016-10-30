@@ -37,6 +37,22 @@ var timed_objects = []
 
 static func from_data( data ):
 	
+	if not data.has( "metadata" ):
+		return null
+	
+	if not data.has( "difficulty" ):
+		return null
+	
+	if not data.has( "files" ):
+		return null
+	
+	if not data.has( "notes" ):
+		return null
+	
+	if not data.has( "timed_objects" ):
+		return null
+	
+	
 	var ins = new( )
 	
 	ins.metadata = data.metadata

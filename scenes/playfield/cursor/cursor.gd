@@ -16,6 +16,7 @@ var pressed_color = Color8( 255, 255, 255 )
 
 
 
+
 func _ready():
 	
 	y_tween = Tween.new( )
@@ -29,6 +30,7 @@ func _ready():
 	
 	set_fixed_process( true )
 	set_process_input( true )
+
 
 
 
@@ -70,6 +72,7 @@ func _process_manual( dt ):
 
 
 
+
 func _input( event ):
 	
 	if ( event.is_action_pressed( "button_1" ) or event.is_action_pressed( "button_2" ) ) and not auto_mode:
@@ -78,6 +81,8 @@ func _input( event ):
 			0.5, Tween.TRANS_CUBIC, Tween.EASE_OUT )
 		
 		color_tween.start( )
+
+
 
 
 func on_y_tween_finished( a, b ):
@@ -121,7 +126,8 @@ func on_y_tween_finished( a, b ):
 			0.5, Tween.TRANS_CUBIC, Tween.EASE_OUT )
 		
 	color_tween.start( )
-	
+
+
 
 
 func initialize( pf ):
@@ -129,9 +135,14 @@ func initialize( pf ):
 	playfield = pf
 	note_manager = playfield.notes
 	
+	auto_mode = playfield.auto_mode
+	
 	playfield.connect( "resized", self, "on_playfield_resized" )
 	on_playfield_resized( )
-	on_y_tween_finished( null, null )
+	
+	if auto_mode:
+		
+		on_y_tween_finished( null, null )
 
 
 

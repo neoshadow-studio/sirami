@@ -4,11 +4,7 @@ extends Panel
 
 
 var track_path
-
-var title = "Title"
-var artist = "Artist"
-var name = "Name"
-
+var db_entry
 
 onready var thumbnail = get_node( "thumbnail" )
 var color_tween
@@ -27,24 +23,35 @@ func _ready():
 	alpha_tween = Tween.new( )
 	add_child( alpha_tween )
 	
+	if db_entry != null:
+		
+		get_node( "title" ).set_text( db_entry.title )
+		get_node( "artist" ).set_text( db_entry.artist )
+		get_node( "name" ).set_text( db_entry.name )
 	
-	get_node( "title" ).set_text( title )
-	get_node( "artist" ).set_text( artist )
-	get_node( "name" ).set_text( name )
+	else:
+		
+		get_node( "title" ).set_text( "No tracks" )
+		get_node( "artist" ).set_text( "" )
+		get_node( "name" ).set_text( "" )
+		
+		get_node( "title" ).set_align( Label.ALIGN_CENTER )
+	
 	
 	set_process_input( true )
 
 
 
+
 func _input_event( event ):
 	
-	if event.is_action_pressed( "click" ):
+	if event.is_action_pressed( "click" ) and db_entry != null:
 		
 		var m_pos = get_local_mouse_pos( )
 		
 		if get_rect( ).has_point( m_pos ):
 			
-			get_parent( ).load_track( track_path )
+			get_node( "../../../.." ).open_track_info( db_entry )
 
 
 
@@ -67,7 +74,7 @@ func on_thumbnail_loaded( tex ):
 	
 	
 	alpha_tween.interpolate_property( thumbnail, "visibility/self_opacity", \
-		0, 1, 3, Tween.TRANS_CUBIC, Tween.EASE_OUT )
+		0, 1, 2, Tween.TRANS_SINE, Tween.EASE_OUT )
 	
 	alpha_tween.start( )
 

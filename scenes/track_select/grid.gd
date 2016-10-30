@@ -4,6 +4,7 @@ extends GridContainer
 const IniStream = preload( "res://data/ini_stream.gd" )
 const Track = preload( "res://shared/track/track.gd" )
 const TrackItem = preload( "res://scenes/track_select/track-item/track-item.tscn" )
+const TrackOption = preload( "res://scenes/track_select/track-option/track-option.tscn" )
 const Playfield = preload( "res://scenes/playfield/playfield.tscn" )
 
 
@@ -22,13 +23,11 @@ func _ready():
 		
 		var ins = TrackItem.instance( )
 		
-		loading_list.push_back( track.thumbnail )
+		var path = track.path.get_base_dir( ) + "/" + track.thumbnail
+		loading_list.push_back( path )
 		
 		ins.track_path = track.path
-		
-		ins.title = track.title
-		ins.artist = track.artist
-		ins.name = track.name
+		ins.db_entry = track
 		
 		add_child( ins )
 	
@@ -89,57 +88,10 @@ func on_screen_resized( ):
 
 
 
-func load_track( path ):
-	
-	var ini = IniStream.new( path )
-	ini.namespace = "track"
-	
-	var data = ini.read( )
-	
-	if data == null:
-		
-		printerr( "Can't load track from '" + path + "' !" )
-		return
-	
-	
-	var track = Track.from_data( data )
-	track.base_dir = path.get_base_dir( )
-	
-	var pf = Playfield.instance( )
-	
-	pf.track = track
-	
-	var root = get_tree( ).get_root( )
-	var scene = root.get_child( root.get_child_count( ) - 1 )
-	
-	var t1 = Tween.new( )
-	var t2 = Tween.new( )
-	
-	add_child( t1 )
-	add_child( t2 )
-	
-	finish_threads( )
-	
-	t2.connect( "tween_complete", self, "on_tweens_finished" )
-	
-	pf.set_opacity( 0 )
-	
-	t1.interpolate_property( scene, "visibility/opacity", 1, 0, 0.5, \
-		Tween.TRANS_CUBIC, Tween.EASE_OUT )
-	t2.interpolate_property( pf, "visibility/opacity", 0, 1, 0.5, \
-		Tween.TRANS_CUBIC, Tween.EASE_OUT, 0.5 )
-	
-	t1.start( )
-	t2.start( )
-	
-	root.add_child( pf )
 
-
-
-func on_tweens_finished( a, b ):
+func open_track_info( track ):
 	
-	var root = get_tree( ).get_root( )
-	var scene = root.get_child( root.get_child_count( ) - 2 )
+	var ins = TrackOption.instance( )
+	ins.db_entry = track
 	
-	scene.queue_free( )
-	root.remove_child( scene )
+	get_tree( ).get_root( ).add_child( ins )

@@ -37,7 +37,7 @@ func initialize( pf ):
 	
 	for n in notes:
 		
-		n.time += pf.time_offset
+		n.time += playfield.time_offset
 	
 	set_fixed_process( true )
 	set_process_input( true )
@@ -46,43 +46,52 @@ func initialize( pf ):
 
 func _fixed_process( dt ):
 	
-	if index >= notes.size( ):
+	if index < notes.size( ):
+	
+		var speed = playfield.timed_object_manager.get_speed_at( playfield.get_time( ) ) * self.speed
 		
-		return
+		while true:
+			
+			if notes[ index ].time - ( 1 / speed ) < playfield.get_time( ):
+				
+				var ins = BasicNote.instance( )
+				
+				ins.time = notes[ index ].time
+				ins.y_pos = notes[ index ].y_pos
+				ins.samples = notes[ index ].samples
+				ins.local_volume = notes[ index ].local_volume
+				ins.volume = notes[ index ].volume
+				
+				ins.playfield = playfield
+				ins.manager = self
+				
+				add_child( ins )
+				index += 1
+			
+			else:
+				
+				break
+			
+			if index >= notes.size( ):
+				
+				break
 	
 	
-	var speed = playfield.timed_object_manager.get_speed_at( playfield.get_time( ) ) * self.speed
+	if can_skip( ):
+		
+		playfield.get_node( "high-gui/skip-bg" ).show( )
 	
-	while true:
+	else:
 		
-		if notes[ index ].time - ( 1 / speed ) < playfield.get_time( ):
-			
-			var ins = BasicNote.instance( )
-			
-			ins.time = notes[ index ].time
-			ins.y_pos = notes[ index ].y_pos
-			ins.samples = notes[ index ].samples
-			ins.local_volume = notes[ index ].local_volume
-			ins.volume = notes[ index ].volume
-			
-			ins.playfield = playfield
-			ins.manager = self
-			
-			add_child( ins )
-			index += 1
-		
-		else:
-			
-			break
-		
-		if index >= notes.size( ):
-			
-			break
+		playfield.get_node( "high-gui/skip-bg" ).hide( )
+
+
 
 
 func get_speed( ):
 	
 	return speed * playfield.get_size( ).x
+
 
 
 
@@ -103,10 +112,21 @@ func _input( ev ):
 			note.play( )
 	
 	
-	if ev.is_action_pressed( "skip" ) and index == 0 and notes.size( ) != 0:
+	if ev.is_action_pressed( "skip" ) and can_skip( ):
+		
+		skip( )
+
+
+
+func skip( ):
+	
+	if index == 0:
 		
 		playfield.music.play( notes[ 0 ].time - 3 )
-
+	
+	else:
+		
+		playfield.show_score_menu( )
 
 
 
@@ -151,5 +171,23 @@ func on_playfield_resized( ):
 		n.on_playfield_resized( )
 
 
+
+
+func can_skip( ):
+	
+	var time = playfield.get_time( )
+	
+	if notes.size( ) == 0:
+		
+		return false
+	
+	
+	if notes[ 0 ].time > time + 4:
+		
+		return true
+	
+	if notes[ notes.size( ) - 1 ].time + 1 < time:
+		
+		return true
 
 
