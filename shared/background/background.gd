@@ -8,6 +8,7 @@ extends Node
 
 
 
+
 ### @brief The modulate color of the background.
 ###
 const MODULATE = Color8( 70, 70, 70 )
@@ -31,8 +32,6 @@ func _ready():
 func define( texture ):
 	
 	var current
-	# We declare the delay of the fade in tween to 0
-	var delay = 0
 	
 	# If there are an actual background.
 	if has_node( "current" ):
@@ -41,24 +40,6 @@ func define( texture ):
 		current = get_node( "current" )
 		current.set_name( "old" )
 		current.set_z( -101 )
-		
-		# We declare the delay of the fade in tween to 1
-		delay = 1
-		
-		# We create the fade out tween, setup its name and add it to the node.
-		var fade_out_tween = Tween.new( )
-		fade_out_tween.set_name( "fade-out" )
-		add_child( fade_out_tween )
-		
-		# We connect the tween complete signal
-		fade_out_tween.connect( "tween_complete", self, "_on_fade_out_tween_completed" )
-		
-		# We interpolate the opacity of the old background
-		fade_out_tween.interpolate_property( current, "visibility/opacity", \
-			1, 0, 1, Tween.TRANS_CUBIC, Tween.EASE_OUT )
-		
-		# And we start the fade out tween.
-		fade_out_tween.start( )
 	
 	
 	# We create the new background sprite.
@@ -93,7 +74,7 @@ func define( texture ):
 	
 	# We interpolate the new sprite's opacity.
 	fade_in_tween.interpolate_property( new, "visibility/opacity", \
-		0, 1, 1, Tween.TRANS_CUBIC, Tween.EASE_OUT, delay )
+		0, 1, 1, Tween.TRANS_SINE, Tween.EASE_OUT )
 	
 	# We start the fade in tween.
 	fade_in_tween.start( )
@@ -200,6 +181,11 @@ func _on_fade_out_tween_completed( obj, b ):
 ### @brief Signal: `fade_in_tween.tween_complete`
 ###
 func _on_fade_in_tween_completed( obj, b ):
+	
+	if has_node( "old" ):
+		
+		remove_child( get_node( "old" ) )
+	
 	
 	# We get the fade in tween
 	var fade_in_tween = get_node( "fade-in" )
