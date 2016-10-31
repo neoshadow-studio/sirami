@@ -109,16 +109,31 @@ func _ready( ):
 
 
 
+### @brief Updates the scene.
+###
+### @param dt : The delta-time.
+###
 func _process( dt ):
 	
+	# We let the logical part do this.
 	logical.process( dt )
 
 
+### @brief Updates the scene at a fixed step.
+###
+### @param dt : The delta-time.
+###
 func _fixed_process( dt ):
 	
+	# We let the logical part do this.
 	logical.fixed_process( dt )
 
 
+### @brief Called when a input event is received.
+###
+### @param ev : The input event.
+###
 func _input( ev ):
 	
+	# We let the logical part handle the event.
 	logical.input( ev )
