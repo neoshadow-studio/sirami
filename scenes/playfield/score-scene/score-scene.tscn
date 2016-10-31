@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=1]
 
-[ext_resource path="res://scenes/new-playfield/score-scene/score-scene.gd" type="Script" id=1]
+[ext_resource path="res://scenes/playfield/score-scene/score-scene.gd" type="Script" id=1]
 [ext_resource path="res://resources/fonts/topo.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=1]
@@ -486,5 +486,3 @@ enabled_focus_mode = 2
 shortcut = null
 text = "Quit"
 flat = true
-
-

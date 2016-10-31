@@ -45,7 +45,12 @@ func _ready():
 
 func _input_event( event ):
 	
-	if event.is_action_pressed( "click" ) and db_entry != null:
+	if db_entry == null:
+		
+		return
+	
+	
+	if event.type == InputEvent.MOUSE_BUTTON and event.is_pressed( ) and event.button_index == BUTTON_LEFT:
 		
 		var m_pos = get_local_mouse_pos( )
 		

@@ -119,7 +119,7 @@ func _process( dt ):
 func _input( ev ):
 	
 	# If the left click is pressed
-	if ev.type == MOUSE_BUTTON and ev.button_index == BUTTON_LEFT and ev.is_pressed( ):
+	if ev.type == InputEvent.MOUSE_BUTTON and ev.button_index == BUTTON_LEFT and ev.is_pressed( ):
 		
 		# We stop the tween.
 		tween.stop_all( )

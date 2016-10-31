@@ -122,6 +122,47 @@ func remove( ):
 
 
 
+### @brief Show the logo.
+###
+### @param instant : Instantly show the logo.
+###
+func show_logo( instant=false ):
+	
+	# We get the logo and the animation player
+	var logo = get_node( "sirami-logo" )
+	var anim = logo.get_node( "animation" )
+	
+	# If is the logo hidden
+	if logo.is_hidden( ):
+		
+		# If we show instantly the logo
+		if instant:
+			# We show the logo and set its opacity to 1
+			logo.show( )
+			logo.set_opacity( 1 )
+		
+		# Otherwise
+		else:
+			# We play the show animation.
+			anim.play( "show" )
+
+
+### @brief Hide the logo.
+###
+func hide_logo( ):
+	
+	# Get the logo and the animation player
+	var logo = get_node( "sirami-logo" )
+	var anim = logo.get_node( "animation" )
+	
+	# If the logo visible
+	if logo.is_visible( ):
+		# We play the hide animation.
+		anim.play( "hide" )
+
+
+
+
 ### @brief Updates the position and the scale of the background.
 ###
 func _update_pos_and_scale( ):
@@ -137,6 +178,30 @@ func _update_pos_and_scale( ):
 		
 		# We update its position and scale.
 		_update_pos_and_scale_for( get_node( "current" ) )
+	
+	# We update the logo.
+	_update_logo( )
+
+
+
+
+### @brief Update the pos and the scale of the logo.
+###
+func _update_logo( ):
+	
+	# We compute the new scale
+	var scale = 0.4 * get_parent( ).get_rect( ).size / get_node( "sirami-logo" ).get_texture( ).get_size( )
+	
+	# We keep the aspect ratio
+	if scale.x > scale.y:
+		scale.y = scale.x
+	
+	else:
+		scale.x = scale.y
+	
+	# We set the scale and the pos.
+	get_node( "sirami-logo" ).set_scale( scale )
+	get_node( "sirami-logo" ).set_pos( get_parent( ).get_rect( ).size / 2 )
 
 
 ### @brief Updates the position and the scale of a background sprite.

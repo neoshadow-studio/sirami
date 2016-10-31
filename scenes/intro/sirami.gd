@@ -34,11 +34,6 @@ func set_factor( v ):
 	# We set the rect
 	var rect = Rect2(0, 0, width, height)
 	set_region_rect(rect)
-	
-	# If the factor is more than or equals to 1
-	if v >= 1:
-		# We remove the script.
-		set_script( null )
 
 
 ### @rief Get the rect factor.

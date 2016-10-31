@@ -97,16 +97,8 @@ func _on_anim_finished( ):
 	# We create a new instance of the main menu
 	var ins = MainMenu.instance( )
 	
-	# We get the sirami logo node
-	var sl = get_node( "sirami-logo" )
-	
-	# We disconnect it.
-	disconnect( "resized", sl, "_on_parent_resized" )
-	
-	# We remove it
-	remove_child( sl )
-	# And place it in the global place holder
-	get_node( "/root/node_placeholder" ).add_child( sl )
+	# We show the sirami logo in the background.
+	get_node( "/root/background" ).show_logo( true )
 	
 	# We switch to the main menu.
 	scene_switcher.switch_with_fade( self, ins )

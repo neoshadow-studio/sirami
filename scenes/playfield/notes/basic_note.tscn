@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=1]
 
 [ext_resource path="res://resources/images/basic_note.tex" type="Texture" id=1]
-[ext_resource path="res://scenes/new-playfield/notes/basic_note.gd" type="Script" id=2]
+[ext_resource path="res://scenes/playfield/notes/basic_note.gd" type="Script" id=2]
 
 [sub_resource type="Animation" id=1]
 
@@ -32,5 +32,3 @@ blend_times = [  ]
 autoplay = ""
 
 [connection signal="finished" from="anim" to="." method="_on_anim_finished"]
-
-

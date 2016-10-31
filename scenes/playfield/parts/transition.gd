@@ -56,18 +56,18 @@ func switch_to_score_scene( ):
 	if playfield.settings.get_setting( "playfield", "hide_background", false):
 		
 		# We reload the texture
-		var path = track.background_path( )
+		var path = playfield.track.background_path( )
 		var texture = load( path )
 		
 		# If the texture failed to load
 		if not texture:
 			# We show a notification.
-			playfields.notifications.spawn_basic( "Can't load background : " + path )
+			playfield.notifications.spawn_basic( "Can't load background : " + path )
 		
 		# If the texture is loaded
 		else:
 			# We define the background.
-			playfields.background.define( texture )
+			playfield.background.define( texture )
 	
 	
 	# We switch to the score menu.
