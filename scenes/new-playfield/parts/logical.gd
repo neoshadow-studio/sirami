@@ -277,6 +277,15 @@ func _update_cursor_scale_and_pos( ):
 
 
 
+### @brief Called when the scene transition is finished.
+###
+func on_scene_transition_finished( ):
+	
+	pass
+
+
+
+
 ### @brief Signal: `notes.played`
 ###
 func _on_note_played( note, score ):

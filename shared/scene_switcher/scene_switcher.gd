@@ -66,7 +66,6 @@ func on_fade_tween_finished( obj, b ):
 	if obj == old_scene:
 		
 		# We remove the old scene.
-		old_scene.queue_free( )
 		get_tree( ).get_root( ).remove_child( old_scene )
 	
 	# If the tween finished to update the opacity of the
@@ -77,6 +76,9 @@ func on_fade_tween_finished( obj, b ):
 		if new_scene.has_method( "_scene_transition_finished" ):
 			# We call it
 			new_scene._scene_transition_finished( old_scene )
+		
+		# We free the old scene.
+		old_scene.free( )
 		
 		# And we remove the references
 		new_scene = null

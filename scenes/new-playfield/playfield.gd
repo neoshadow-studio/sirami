@@ -7,7 +7,9 @@
 ###
 
 
+
 extends Control
+
 
 
 
@@ -137,3 +139,13 @@ func _input( ev ):
 	
 	# We let the logical part handle the event.
 	logical.input( ev )
+
+
+### @brief Called when the scene transition is finished.
+###
+### @param old_scene : The old scene.
+###
+func _scene_transition_finished( old_scene ):
+	
+	# We let the logical part do this.
+	logical.on_scene_transition_finished( )
