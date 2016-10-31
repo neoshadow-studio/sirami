@@ -166,6 +166,16 @@ func _update_pos_and_scale_for( node ):
 
 
 
+### @brief Signal: `get_tree().screen_resized`
+###
+func _on_screen_resized( ):
+	
+	# We update the position and the scale of the background elements.
+	_update_pos_and_scale( )
+
+
+
+
 ### @brief Signal: `fade_out_tween.tween_complete`
 ###
 func _on_fade_out_tween_completed( obj, b ):

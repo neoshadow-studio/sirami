@@ -114,7 +114,14 @@ modulate = Color( 0.352941, 0.352941, 0.352941, 1 )
 transform/scale = Vector2( 1.25, 1.25 )
 texture = ExtResource( 3 )
 
-[node name="tween" type="Tween" parent="sirami-logo"]
+[node name="scale-tween" type="Tween" parent="sirami-logo"]
+
+playback/process_mode = 1
+playback/active = false
+playback/repeat = false
+playback/speed = 1.0
+
+[node name="color-tween" type="Tween" parent="sirami-logo"]
 
 playback/process_mode = 1
 playback/active = false
@@ -190,6 +197,13 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
+[node name="tween" type="Tween" parent="high-gui/score"]
+
+playback/process_mode = 1
+playback/active = false
+playback/repeat = false
+playback/speed = 1.0
+
 [node name="accuracy" type="Label" parent="high-gui"]
 
 focus/ignore_mouse = true
@@ -221,7 +235,7 @@ margin/top = 39.0
 margin/right = 236.0
 margin/bottom = 10.0
 custom_fonts/font = ExtResource( 6 )
-custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "0x"
 align = 1
 valign = 1

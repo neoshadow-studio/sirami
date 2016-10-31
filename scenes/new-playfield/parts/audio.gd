@@ -73,6 +73,9 @@ func _init( pf ):
 	
 	# We connect the changed signal of the settings.
 	settings.connect( "changed", self, "_on_setting_changed" )
+	
+	# We start the music.
+	_start_music( )
 
 
 ### @brief Destructor.
@@ -106,26 +109,26 @@ func update_volume( ):
 ### @param samples : The samples to play (bitfield).
 ### @param vol : The volume of the samples (optional).
 ###
-func play_samples( samples, vol = null ):
+func play_samples( smpls, vol = null ):
 	
 	# We must keep a track of the created voice.
 	var voice
 	
 	
 	# If we need to play the normal sample.
-	if ( samples & SAMPLE_NORMAL ) != 0:
+	if ( smpls & SAMPLE_NORMAL ) != 0:
 		voice = samples.play( "normal" )
 	
 	# If we need to play the normal sample.
-	if ( samples & SAMPLE_CLAP ) != 0:
+	if ( smpls & SAMPLE_CLAP ) != 0:
 		voice = samples.play( "clap" )
 	
 	# If we need to play the normal sample.
-	if ( samples & SAMPLE_FINISH ) != 0:
+	if ( smpls & SAMPLE_FINISH ) != 0:
 		voice = samples.play( "finish" )
 	
 	# If we need to play the normal sample.
-	if ( samples & SAMPLE_WHISTLE ) != 0:
+	if ( smpls & SAMPLE_WHISTLE ) != 0:
 		voice = samples.play( "whistle" )
 	
 	
@@ -142,6 +145,31 @@ func play_samples( samples, vol = null ):
 	
 	# We set the volume of the created voice.
 	samples.set_volume( voice, vol )
+
+
+
+
+### @brief Starts the music.
+###
+func _start_music( ):
+	
+	# We get the full path of the music
+	var path = playfield.track.music_path( )
+	# We load it
+	var stream = load( path )
+	
+	
+	# If the load failed
+	if stream == null:
+		
+		# We show a notification and stop here.
+		playfield.notifications.spawn_basic( "Can't load music file '" + path + "' !" )
+		return
+	
+	
+	# We set the music's stream and play it.
+	playfield.music.set_stream( stream )
+	playfield.music.play( 20 )
 
 
 
