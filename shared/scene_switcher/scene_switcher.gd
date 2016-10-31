@@ -1,93 +1,85 @@
+### @class SceneSwitcher
+###
+### @brief Allow scene switches with effets.
+###
+
+
 
 extends Node
 
 
+
+
+### @brief The old scene.
+###
 var old_scene
+
+### @brief The new scene.
+###
 var new_scene
 
-onready var n_bg = get_node( "background" )
-
-
-func _ready():
-	
-	pass
 
 
 
-func set_transition_background( tex, color ):
-	
-	if tex == null:
-		return
-	
-	n_bg.set_texture( tex )
-	n_bg.set_modulate( color )
-	
-	n_bg.set_pos( get_viewport( ).get_rect( ).size / 2 )
-	
-	var scale = get_viewport( ).get_rect( ).size / tex.get_size( )
-	
-	if scale.x > scale.y:
-		
-		scale.y = scale.x
-	
-	else:
-		
-		scale.x = scale.y
-	
-	n_bg.set_scale( scale )
-	n_bg.show( )
-
-
-func remove_transition_background( ):
-	
-	n_bg.hide( )
-	n_bg.set_texture( null )
-
-
-func get_transition_background( ):
-	
-	return n_bg.get_texture( )
-
-
-
+### @brief Switch to the new scene with a fade effect.
+###
+### @param old_scene : The old scene.
+### @param new_scene : The new scene.
+###
 func switch_with_fade( old_scene, new_scene ):
 	
+	# We save the instances.
 	self.old_scene = old_scene
 	self.new_scene = new_scene
 	
+	# We create the fade tweens.
+	var fade_tween = Tween.new( )
 	
-	var t1 = Tween.new( )
-	var t2 = Tween.new( )
+	# We add the tweens to the old scene
+	old_scene.add_child( fade_tween )
 	
-	old_scene.add_child( t1 )
-	old_scene.add_child( t2 )
-	
-	t1.interpolate_property( old_scene, "visibility/opacity", 1, 0, 0.5, \
+	# We setup the tween
+	fade_tween.interpolate_property( old_scene, "visibility/opacity", 1, 0, 0.5, \
 		Tween.TRANS_CUBIC, Tween.EASE_OUT )
-	t2.interpolate_property( new_scene, "visibility/opacity", 0, 1, 0.5, \
+	fade_tween.interpolate_property( new_scene, "visibility/opacity", 0, 1, 0.5, \
 		Tween.TRANS_CUBIC, Tween.EASE_OUT, 0.5 )
 	
-	t1.start( )
-	t2.start( )
+	# We connect the tween_complete signal
+	fade_tween.connect ( "tween_complete", self, "on_fade_tween_finished" )
 	
-	t2.connect ( "tween_complete", self, "on_fade_tween_finished" )
+	# We start the tween
+	fade_tween.start( )
 	
+	# We add the new scene to the tree and set its opacity to 0
 	get_tree( ).get_root( ).add_child( new_scene )
 	new_scene.set_opacity( 0 )
 
 
 
 
-func on_fade_tween_finished( a, b ):
+### @brief Signal: `fade_tween.tween_complete`
+###
+func on_fade_tween_finished( obj, b ):
 	
-	if new_scene.has_method( "_scene_transition_finished" ):
+	# If the tween finished to update the opacity of the
+	# old scene
+	if obj == old_scene:
 		
-		new_scene._scene_transition_finished( old_scene )
+		# We remove the old scene.
+		get_tree( ).get_root( ).remove_child( old_scene )
 	
-	old_scene.queue_free( )
-	get_tree( ).get_root( ).remove_child( old_scene )
-	
-	old_scene = null
-	new_scene = null
-	
-	remove_transition_background( )
+	# If the tween finished to update the opacity of the
+	# new scene
+	else:
+		
+		# If the new scene has a callback method
+		if new_scene.has_method( "_scene_transition_finished" ):
+			# We call it
+			new_scene._scene_transition_finished( old_scene )
+		
+		# We free the old scene.
+		old_scene.free( )
+		
+		# And we remove the references
+		new_scene = null
+		old_scene = null

@@ -31,7 +31,7 @@ func _ready():
 
 func _input( ev ):
 	
-	if ev.is_action_pressed( "click" ):
+	if ev.type == InputEvent.MOUSE_BUTTON and ev.button_index == BUTTON_LEFT:
 		
 		var m_pos = get_local_mouse_pos( )
 		
