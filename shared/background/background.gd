@@ -11,7 +11,7 @@ extends Node
 
 ### @brief The modulate color of the background.
 ###
-const MODULATE = Color8( 70, 70, 70 )
+const MODULATE = Color8( 50, 50, 50 )
 
 
 

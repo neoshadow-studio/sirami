@@ -51,8 +51,8 @@ func _init( pf ):
 	
 	# If we need to hide the background.
 	if settings.get_setting( "playfield", "hide_background", false ):
-		# TODO: Hide the background.
-		pass
+		# We remove the background
+		playfield.background.remove( )
 	
 	# If we need to hide the sirami logo.
 	if settings.get_setting( "playfield", "hide_sirami", false ):
@@ -71,11 +71,15 @@ func process( dt ):
 	# We update the timeline progression.
 	_update_timeline_progress( )
 	
+	# We update the skip button
+	_update_skip_button( )
+	
+	
 	# We update the gui
 	playfield.gui.process( dt )
 	
-	# We update the skip button
-	_update_skip_button( )
+	# We update the mods
+	playfield.mods.process( dt )
 
 
 ### @brief Updates the time sensitive logic.
@@ -87,9 +91,9 @@ func fixed_process( dt ) :
 	# We update the notes.
 	playfield.notes.fixed_process( dt )
 	
-	
+	# If the auto mod isn't actif
 	if not playfield.mods.auto_mode:
-		
+		# We update the input manager
 		playfield.input.fixed_process( dt )
 
 
@@ -176,6 +180,9 @@ func skip( ):
 ### @brief Called when a key/button is pressed.
 ###
 func on_key_pressed( ):
+	
+	# We apply the color effect on the cursor
+	playfield.visual.apply_color_effect_on_cursor( )
 	
 	# We get the first alive note
 	var first = playfield.notes.get_first_alive( )

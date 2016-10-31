@@ -28,50 +28,67 @@ const Part_Mods = preload( "parts/mods.gd" )
 
 
 
+
+### @brief The settings manager.
 var settings
+### @brief The clocks manager.
 var clocks
+### @brief The music manager.
 var music
+### @brief The notifications manager.
 var notifications
+### @brief The background manager.
+var background
 
-
+### @brief The track to play.
 var track = null
 
+### @brief The visual part.
 var visual
+### @brief The audio part.
 var audio
+### @brief The logical part.
 var logical
+### @brief The time part.
 var time
+### @brief The transition part.
 var transition
+### @brief The score part.
 var score
+### @brief The notes part.
 var notes
+### @brief The timed objects part.
 var timed_objects
+### @brief The gui part.
 var gui
+### @brief The input part.
 var input
+### @brief The mods part.
 var mods
 
 
 
 
+### @brief Called when the node is ready in the scene.
+###
 func _ready( ):
 	
+	# We load the singletons
 	settings = get_node( "/root/settings" )
 	clocks = get_node( "/root/clocks" )
 	music = get_node( "/root/music" )
 	notifications = get_node( "/root/notifications" )
+	background = get_node( "/root/background" )
 	
-	var ini = IniStream.new( "user://tracks/TestMusic/test.track" )
-	ini.namespace = "track"
-	
-	track = ini.read( )
-	track = Track.from_data( track )
-	track.base_dir = "user://tracks/TestMusic"
-	
-	
+	# If there are no tracks
 	if track == null:
 		
-		notifications.spawn_basic( "Failed to load track." )
+		# We show a notification and stop here
+		notifications.spawn_basic( "No tracks given." )
 		return
 	
 	
+	# We load the different parts of the scene.
 	time = Part_Time.new( self )
 	notes = Part_Notes.new( self )
 	visual = Part_Visual.new( self )
@@ -84,6 +101,7 @@ func _ready( ):
 	input = Part_Input.new( self )
 	mods = Part_Mods.new( self )
 	
+	# We enable the process, the fixed process, and the input handling
 	set_process( true )
 	set_fixed_process( true )
 	set_process_input( true )
