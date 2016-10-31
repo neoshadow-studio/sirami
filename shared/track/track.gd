@@ -11,7 +11,7 @@ extends Reference
 
 
 const TimedObject = preload( "res://shared/timed_object/timed_object.gd" )
-const BasicNote = preload( "res://scenes/new-playfield/notes/basic_note.gd" )
+const BasicNote = preload( "res://scenes/playfield/notes/basic_note.gd" )
 
 
 

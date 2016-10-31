@@ -1,13 +1,11 @@
-[gd_scene load_steps=10 format=1]
+[gd_scene load_steps=8 format=1]
 
 [ext_resource path="res://scenes/intro/intro.gd" type="Script" id=1]
-[ext_resource path="res://resources/images/main_background.tex" type="Texture" id=2]
-[ext_resource path="res://scenes/intro/background.gd" type="Script" id=3]
-[ext_resource path="res://scenes/intro/sirami-logo.gd" type="Script" id=4]
-[ext_resource path="res://resources/images/sirami_background.tex" type="Texture" id=5]
-[ext_resource path="res://resources/images/sirami.tex" type="Texture" id=6]
-[ext_resource path="res://scenes/intro/sirami.gd" type="Script" id=7]
-[ext_resource path="res://resources/images/ns_logo.tex" type="Texture" id=8]
+[ext_resource path="res://scenes/intro/sirami-logo.gd" type="Script" id=2]
+[ext_resource path="res://resources/images/sirami_background.tex" type="Texture" id=3]
+[ext_resource path="res://resources/images/sirami.tex" type="Texture" id=4]
+[ext_resource path="res://scenes/intro/sirami.gd" type="Script" id=5]
+[ext_resource path="res://resources/images/ns_logo.tex" type="Texture" id=6]
 
 [sub_resource type="Animation" id=1]
 
@@ -45,37 +43,29 @@ margin/right = 0.0
 margin/bottom = 0.0
 script/script = ExtResource( 1 )
 
-[node name="background" type="Sprite" parent="."]
-
-visibility/behind_parent = true
-transform/pos = Vector2( -1.85059, -6.10352e-05 )
-texture = ExtResource( 2 )
-modulate = Color( 0.429688, 0.429688, 0.429688, 1 )
-script/script = ExtResource( 3 )
-
 [node name="sirami-logo" type="Sprite" parent="."]
 
 transform/pos = Vector2( 500, 300 )
 transform/rot = 90.0
 transform/scale = Vector2( 0.2, 0.2 )
-script/script = ExtResource( 4 )
+script/script = ExtResource( 2 )
 factor = 0
-bg_texture = ExtResource( 5 )
+bg_texture = ExtResource( 3 )
 
 [node name="sirami" type="Sprite" parent="sirami-logo"]
 
 transform/rot = -90.0
 transform/scale = Vector2( 2.5, 2.5 )
-texture = ExtResource( 6 )
+texture = ExtResource( 4 )
 region = true
-script/script = ExtResource( 7 )
+script/script = ExtResource( 5 )
 factor = 0
 
 [node name="ns" type="Sprite" parent="."]
 
 transform/pos = Vector2( 500, 553.268 )
 transform/scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 8 )
+texture = ExtResource( 6 )
 region_rect = Rect2( 0, 0, 720, 176 )
 
 [node name="anim" type="AnimationPlayer" parent="."]

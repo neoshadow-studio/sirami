@@ -1,201 +1,151 @@
+### @class Playfield
+###
+### @brief The main gameplay scene.
+###
+### Before switching to this scene, the `track` field must
+### be set to a valid track data.
+###
 
-extends Container
 
 
-const ScoreManager = preload( "res://scenes/playfield/score_manager.gd" )
-const TimedObjectManager = preload( "res://scenes/playfield/timed_object_manager.gd" )
+extends Control
+
+
+
+
+const IniStream = preload( "res://data/ini_stream.gd" )
 const Track = preload( "res://shared/track/track.gd" )
-const ScoreMenu = preload( "res://scenes/playfield/score_menu/score_menu.tscn" )
 
-const Ini = preload( "res://data/ini_stream.gd" )
-
-
-onready var clocks = get_node( "/root/clocks" )
-onready var settings = get_node( "/root/settings" )
-onready var scene_switcher = get_node( "/root/scene_switcher" )
-
-
-onready var background = get_node( "background" )
-onready var sirami = get_node( "sirami" )
-onready var low_fx = get_node( "low-fx" )
-onready var notes = get_node( "notes" )
-onready var low_gui = get_node( "low-gui" )
-onready var high_fx = get_node( "high-fx" )
-onready var high_gui = get_node( "high-gui" )
-
-onready var samples = get_node( "samples" )
-onready var music = get_node( "/root/music" )
-
-onready var timeline = get_node( "low-gui/timeline" )
-onready var cursor = get_node( "low-gui/cursor" )
-
-onready var skip_button = get_node( "high-gui/skip-bg/skip" )
+const Part_Visual = preload( "parts/visual.gd" )
+const Part_Audio = preload( "parts/audio.gd" )
+const Part_Logical = preload( "parts/logical.gd" )
+const Part_Time = preload( "parts/time.gd" )
+const Part_Transition = preload( "parts/transition.gd" )
+const Part_Score = preload( "parts/score.gd" )
+const Part_Notes = preload( "parts/notes.gd" )
+const Part_TimedObjects = preload( "parts/timed_objects.gd" )
+const Part_Gui = preload( "parts/gui.gd" )
+const Part_Input = preload( "parts/input.gd" )
+const Part_Mods = preload( "parts/mods.gd" )
 
 
 
-var score_manager
-var timed_object_manager
 
-var global_volume = 1
-var samples_volume = 1
-var current_samples_volume = 1
-var music_volume = 1
+### @brief The settings manager.
+var settings
+### @brief The clocks manager.
+var clocks
+### @brief The music manager.
+var music
+### @brief The notifications manager.
+var notifications
+### @brief The background manager.
+var background
+
+### @brief The track to play.
+var track = null
+
+### @brief The visual part.
+var visual
+### @brief The audio part.
+var audio
+### @brief The logical part.
+var logical
+### @brief The time part.
+var time
+### @brief The transition part.
+var transition
+### @brief The score part.
+var score
+### @brief The notes part.
+var notes
+### @brief The timed objects part.
+var timed_objects
+### @brief The gui part.
+var gui
+### @brief The input part.
+var input
+### @brief The mods part.
+var mods
 
 
-var track
-var auto_mode = false
-
-var timeline_visual_offset = 0
-var timeline_time_offset setget , get_timeline_time_offset
-
-var time_offset = 0.82
 
 
-
-func _ready():
+### @brief Called when the node is ready in the scene.
+###
+func _ready( ):
 	
-	timeline_visual_offset = timeline.get_scale( ).x * timeline.get_texture( ).get_size( ).x
+	# We load the singletons
+	settings = get_node( "/root/settings" )
+	clocks = get_node( "/root/clocks" )
+	music = get_node( "/root/music" )
+	notifications = get_node( "/root/notifications" )
+	background = get_node( "/root/background" )
 	
-	clocks.add_clock( "music" )
-	
-	
-	global_volume = settings.get_setting( "audio", "global_volume", 1 )
-	samples_volume = settings.get_setting( "audio", "samples_volume", 1 )
-	music_volume = settings.get_setting( "audio", "music_volume", 1 )
-	
-	music.set_volume( global_volume * music_volume )
-	
-	music.connect( "finished", self, "_on_music_finished" )
-	
-	music.set_stream( load( track.base_dir + "/" + track.files.music ) )
-	music.reset( )
-	music.play( )
-	
-	
-	score_manager = ScoreManager.new( self )
-	timed_object_manager = TimedObjectManager.new( self )
-	
-	
-	background.initialize( self )
-	sirami.initialize( self )
-	low_fx.initialize( self )
-	notes.initialize( self )
-	timeline.initialize( self )
-	cursor.initialize( self )
-	high_fx.initialize( self )
-	high_gui.initialize( self )
-	
-	
-	if settings.get_setting( "playfield", "hide_background", false ):
-	
-		background.queue_free( )
-		remove_child( background )
+	# If there are no tracks
+	if track == null:
 		
-		background = null
-		
-	if settings.get_setting( "playfield", "hide_sirami", false ):
-		
-		sirami.queue_free( )
-		remove_child( sirami )
-		
-		sirami = null
-
-
-
-func _exit_tree( ):
-	
-	music.disconnect( "finished", self, "_on_music_finished" )
-
-
-
-func get_timeline_time_offset( ):
-	
-	return timeline_visual_offset / notes.speed
-
-
-func get_time( ):
-	
-	return clocks.get_time( "music" )
-
-
-func set_time( v ):
-	
-	clocks.set_time( "music", v )
-
-
-
-func play_samples( smpls, vol = null ):
-	
-	var voice
-	
-	
-	if (smpls & 0x01) != 0:
-		
-		voice = samples.play( "normal" )
-	
-	if (smpls & 0x02) != 0:
-		
-		voice = samples.play( "clap" )
-	
-	if (smpls & 0x04) != 0:
-		
-		voice = samples.play( "finish" )
-		
-	if (smpls & 0x08) != 0:
-		
-		voice = samples.play( "whistle" )
-	
-	
-	if not voice:
-		
+		# We show a notification and stop here
+		notifications.spawn_basic( "No tracks given." )
 		return
 	
 	
-	if vol: 
-		
-		samples.set_volume( voice, global_volume * samples_volume * vol )
+	# We load the different parts of the scene.
+	time = Part_Time.new( self )
+	notes = Part_Notes.new( self )
+	visual = Part_Visual.new( self )
+	audio = Part_Audio.new( self )
+	logical = Part_Logical.new( self )
+	transition = Part_Transition.new( self )
+	score = Part_Score.new( self )
+	timed_objects = Part_Notes.new( self )
+	gui = Part_Gui.new( self )
+	input = Part_Input.new( self )
+	mods = Part_Mods.new( self )
 	
-	else:
-		
-		samples.set_volume( voice, global_volume * samples_volume * current_samples_volume )
+	# We enable the process, the fixed process, and the input handling
+	set_process( true )
+	set_fixed_process( true )
+	set_process_input( true )
 
 
 
 
-func show_score_menu( ):
+### @brief Updates the scene.
+###
+### @param dt : The delta-time.
+###
+func _process( dt ):
 	
-	var ins = ScoreMenu.instance( )
-	ins.set_opacity( 0 )
+	# We let the logical part do this.
+	logical.process( dt )
+
+
+### @brief Updates the scene at a fixed step.
+###
+### @param dt : The delta-time.
+###
+func _fixed_process( dt ):
 	
-	ins.track = track
-	ins.scores = {
-		"score": score_manager.score,
-		"combo": score_manager.max_combo, 
-		"accuracy": score_manager.accuracy,
-		
-		"100": score_manager.note_100_played,
-		"50": score_manager.note_50_played,
-		"10": score_manager.note_10_played,
-		"missed": score_manager.note_missed
-	}
+	# We let the logical part do this.
+	logical.fixed_process( dt )
+
+
+### @brief Called when a input event is received.
+###
+### @param ev : The input event.
+###
+func _input( ev ):
 	
+	# We let the logical part handle the event.
+	logical.input( ev )
+
+
+### @brief Called when the scene transition is finished.
+###
+### @param old_scene : The old scene.
+###
+func _scene_transition_finished( old_scene ):
 	
-	if background != null:
-		background.hide( )
-		
-		scene_switcher.set_transition_background( background.get_texture( ), background.get_modulate( ) )
-	
-	scene_switcher.switch_with_fade( self, ins )
-
-
-
-
-func _on_skip_pressed():
-	
-	notes.skip( )
-
-
-
-func _on_music_finished():
-	
-	show_score_menu( )
+	# We let the logical part do this.
+	logical.on_scene_transition_finished( )

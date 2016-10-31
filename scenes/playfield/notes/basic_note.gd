@@ -1,172 +1,214 @@
+### @class BasicNote
+###
+### @brief A basic note.
+###
+
+
 
 extends Sprite
 
-const SAMPLE_NONE = 0x00
-
-const SAMPLE_NORMAL = 0x01
-const SAMPLE_CLAP = 0x02
-const SAMPLE_FINISH = 0x04
-const SAMPLE_WHISTLE = 0x08
-
-const SAMPLE_ALL = SAMPLE_NORMAL | SAMPLE_CLAP | SAMPLE_FINISH | SAMPLE_WHISTLE
 
 
 
+const Audio = preload( "../parts/audio.gd" )
+
+
+
+
+### @brief The note's type.
 var type = "basic"
 
+### @brief The note's time.
 var time
+### @brief The Y position of the note.
 var y_pos
 
-var samples = SAMPLE_NONE
+### @brief The note's samples.
+var samples = Audio.SAMPLE_NONE
 
+### @brief Define if the note has its own volume.
 var local_volume = false
+### @brief The volume of the note.
 var volume = 1
 
-
+### @brief The playfield.
 var playfield
+### @brief The note manager.
 var manager
 
+### @brief The speed of the note.
 var speed
 
+### @brief Define if the note has been played.
 var played = false
 
 
 
+
+### @brief Called when the node is ready in the tree.
+###
 func _ready():
 	
+	# We resize the note.
 	on_playfield_resized( )
 	
+	# We enable the fixed process update.
 	set_fixed_process( true )
 
 
 
+
+### @brief Called when the playfield is resized.
+###
 func on_playfield_resized( ):
 	
-	speed = playfield.timed_object_manager.get_final_speed_at( time )
+	# We get the speed of the notes
+	speed = playfield.track.difficulty.speed * playfield.get_size( ).x
+	var size = playfield.track.difficulty.size
 	
-	var scale = (playfield.get_size( ).y * 0.1 * manager.size) / get_texture( ).get_size( ).y
+	# We compute the new scale of the note
+	var scale = (playfield.get_size( ).y * 0.1 * size) / get_texture( ).get_size( ).y
 	set_scale( Vector2( scale, scale ) )
 	
+	# We compute the Y position of the note.
 	var y = playfield.get_size( ).y - ( get_texture( ).get_size( ).y * scale )
 	y = y * y_pos + (get_texture( ).get_size( ).y * scale / 2)
 	
-	var x = playfield.timeline_visual_offset + (time - playfield.get_time( )) * speed
+	# We compute the X position of the note.
+	var x = playfield.visual.timeline_offset + (time - playfield.time.get_time( )) * speed
 	
+	# We set the new position.
 	set_pos( Vector2( x, y ) )
 
 
 
+
+### @brief Updates the note.
+###
+### @param dt : The delta-time.
+###
 func _fixed_process( dt ):
 	
+	# If the note is played
 	if played:
+		# We do nothing.
 		return
 	
 	
-	var x = playfield.timeline_visual_offset + (time - playfield.get_time( )) * speed
+	# We compute the new X position of the note.
+	var x = playfield.visual.timeline_offset + (time - playfield.time.get_time( )) * speed
 	
+	# We get the actual pos and change the X position.
 	var p = get_pos( )
 	p.x = x
 	
+	# We set the X position of the note.
 	set_pos( p )
 	
 	
-	if time < playfield.get_time( ) and playfield.cursor.auto_mode:
-		
-		play( true )
+	# TODO: Handle auto mode.
 	
-	if time < playfield.get_time( ) and not playfield.score_manager.can_be_played( self ):
+	# We the note is totally missed
+	if time < playfield.time.get_time( ) and not playfield.score.can_be_played( self ):
+		
 		play( )
 
 
 
 
+### @brief Plays the note.
+###
+### @param auto : Played by the auto mod ?
+###
 func play( auto = false ):
 	
+	# If the note is already played
 	if played:
+		# we do nothing.
 		return
 	
+	# We indicate the note is played.
 	played = true
 	
-	var score = playfield.score_manager.get_score( self )
 	
+	# We get the score
+	var score = playfield.score.get_score( self )
 	
+	# If there are the auto mode
 	if auto:
-		
+		# We force the score to the 100
 		score = 100
 	
 	
-	playfield.score_manager.add_score( score )
-	
-	
-	if score == 100:
-		
-		playfield.high_fx.spawn_100( get_pos( ).y )
-	
-	if score == 50:
-		
-		playfield.high_fx.spawn_50( get_pos( ).y )
-	
-	if score == 10:
-		
-		playfield.high_fx.spawn_10( get_pos( ).y )
-	
-	if score == 0:
-		
-		playfield.high_fx.spawn_miss( get_pos( ).y )
-	
-	
+	# If the score isn't miss
 	if score != 0:
-	
-		if ( samples & SAMPLE_FINISH ) != 0:
-			
-			playfield.low_fx.spawn_finish( get_pos( ).y )
 		
-		elif ( samples & SAMPLE_WHISTLE ) != 0:
-			
-			playfield.low_fx.spawn_whistle( get_pos( ).y )
+		# If the note has a local volume
+		if local_volume:
+			# We play the samples with the volume
+			playfield.audio.play_samples( samples, volume )
 		
-		elif  ( samples & SAMPLE_CLAP ) != 0:
-			
-			playfield.low_fx.spawn_clap( get_pos( ).y )
-			
-		elif ( samples & SAMPLE_NORMAL ) != 0:
-			
-			playfield.low_fx.spawn_normal( get_pos( ).y )
-	
-		playfield.play_samples( samples )
+		# If the note hasn't has a local volume
+		else:
+			# We play the samples with the default volume
+			playfield.audio.play_samples( samples )
 		
-		manager.emit_signal( "played", self )
+		# We emit the played signal
+		playfield.notes.emit_signal( "played", self, score )
 	
 	
+	# We add the score
+	playfield.score.add_score( score )
+	
+	# We play the fade out animation.
 	get_node( "anim" ).play( "fade" )
 
 
 
 
-func is_cursor_in( cursor_y ):
+### @brief Checks if the cursor is in the note.
+###
+### @param cursor_y : The Y position of the curosr.
+### @return true if the cursor is in, false otherwise.
+###
+func is_cursor_in( ):
 	
+	# We get the cursor position.
+	var cursor_y = playfield.get_node( "low-gui/cursor" ).get_pos( ).y
+	
+	# We compute the top and bottom Y position.
 	var top = get_pos( ).y - ( get_texture( ).get_size( ).y * get_scale( ).y / 2 )
 	var bottom = get_pos( ).y + ( get_texture( ).get_size( ).y * get_scale( ).y / 2 )
 	
+	# If the cursor is between the top and the bottom
 	if cursor_y > top and cursor_y < bottom:
-		
+		# The cursor is in the note
 		return true
 	
+	# Otherwise, the note is not in the note.
 	return false
 
 
 
 
+# @brief Signal: `anim.finished`
 func _on_anim_finished():
+	
+	# We remove the note.
 	queue_free( )
-	manager.remove_child( self )
+	manager.notes_holder.remove_child( self )
 
 
 
 
-
+### @brief Create a new instance from loaded data.
+###
+### @param d : Raw data.
+### @return The new instance.
+###
 static func from_data( d ):
 	
+	# We parse the note's string.
 	var time
 	var y_pos
 	var samples
@@ -181,18 +223,25 @@ static func from_data( d ):
 	volume = float( data[ 5 ] )
 	
 	
-	
+	# We create a new instance.
 	var ins = new( )
 	
+	# Setup its values
 	ins.time = time
 	ins.y_pos = y_pos
 	ins.samples = samples
 	ins.local_volume = local_volume
 	ins.volume = volume
 	
+	# And return it.
 	return ins
 
 
+
+### @brief Converts the instance to savable data.
+###
+### @return Savable data.
+###
 func to_data( ):
 	
 	var s = ""
