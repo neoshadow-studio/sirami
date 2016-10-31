@@ -66,7 +66,7 @@ func _init( pf ):
 	samples = pf.get_node( "samples" )
 	
 	# We update the volumes.
-	update_volume( )
+	update_volumes( )
 	
 	# We set the current samples volume.
 	current_samples_volume = 1
@@ -78,20 +78,11 @@ func _init( pf ):
 	_start_music( )
 
 
-### @brief Destructor.
-###
-func free( ):
-	
-	settings.disconnect( "changed", self, "_on_setting_changed" )
-	
-	.free( )
-
-
 
 
 ### @brief Updates the volumes.
 ###
-func update_volume( ):
+func update_volumes( ):
 	
 	# We load the settings about the volume.
 	global_volume = settings.get_setting( "audio", "global_volume", 1 )
@@ -169,7 +160,7 @@ func _start_music( ):
 	
 	# We set the music's stream and play it.
 	playfield.music.set_stream( stream )
-	playfield.music.play( 20 )
+	playfield.music.play( )
 
 
 
@@ -180,6 +171,7 @@ func _start_music( ):
 ###
 func _on_setting_changed( section, name, new_value, old_value ):
 	
+	# If a volume has changed
 	if section == "audio" and name.find( "volume" ) != -1:
-		
-		update_volume( )
+		# We update the volumes.
+		update_volumes( )

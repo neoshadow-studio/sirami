@@ -118,7 +118,7 @@ func can_be_played( note ):
 func get_score( note ):
 	
 	# We compute the delta-time
-	var dt = abs( playfield.get_time( ) - note.time )
+	var dt = abs( playfield.time.get_time( ) - note.time )
 	
 	# If this is a 100
 	if dt <= DT_100 * factor:

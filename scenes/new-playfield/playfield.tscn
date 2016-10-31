@@ -257,6 +257,8 @@ autoplay = ""
 
 [node name="skip" type="Button" parent="high-gui"]
 
+visibility/visible = false
+visibility/opacity = 0.0
 anchor/left = 3
 anchor/top = 1
 anchor/right = 3

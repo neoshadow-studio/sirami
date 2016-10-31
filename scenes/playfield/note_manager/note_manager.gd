@@ -16,7 +16,6 @@ var index = 0
 
 
 signal played( note )
-signal should_be_played( note )
 
 
 func _ready():

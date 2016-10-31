@@ -46,6 +46,28 @@ func reset( ):
 
 
 
+### @brief Starts the stream playback.
+###
+### @param pos : Time in the music.
+###
+func play( pos=0 ):
+	
+	last_playhead = pos
+	.play( pos )
+
+
+### @brief Seeks to the given position.
+###
+### @param pos : Time to seek.
+###
+func seek_pos( pos ):
+	
+	last_playhead = pos
+	.seek_pos( pos )
+
+
+
+
 ### @brief Called at a regular rate.
 ###
 ### @param dt : The delta-time.

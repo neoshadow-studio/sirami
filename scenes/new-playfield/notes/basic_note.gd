@@ -9,6 +9,7 @@ extends Sprite
 
 
 
+
 const Audio = preload( "../parts/audio.gd" )
 
 
@@ -108,11 +109,9 @@ func _fixed_process( dt ):
 	# TODO: Handle auto mode.
 	
 	# We the note is totally missed
-	if time < playfield.time.get_time( ):# and not playfield.score_manager.can_be_played( self ):
+	if time < playfield.time.get_time( ) and not playfield.score.can_be_played( self ):
 		
-		# We play it.
 		play( )
-		playfield.notes.emit_signal( "should_be_played", self )
 
 
 
@@ -133,7 +132,7 @@ func play( auto = false ):
 	
 	
 	# We get the score
-	var score = 100#playfield.score.get_score( self )
+	var score = playfield.score.get_score( self )
 	
 	# If there are the auto mode
 	if auto:
@@ -153,12 +152,13 @@ func play( auto = false ):
 		else:
 			# We play the samples with the default volume
 			playfield.audio.play_samples( samples )
+		
+		# We emit the played signal
+		playfield.notes.emit_signal( "played", self, score )
+	
 	
 	# We add the score
 	playfield.score.add_score( score )
-	# We emit the played signal
-	playfield.notes.emit_signal( "played", self, score )
-	
 	
 	# We play the fade out animation.
 	get_node( "anim" ).play( "fade" )
@@ -171,7 +171,10 @@ func play( auto = false ):
 ### @param cursor_y : The Y position of the curosr.
 ### @return true if the cursor is in, false otherwise.
 ###
-func is_cursor_in( cursor_y ):
+func is_cursor_in( ):
+	
+	# We get the cursor position.
+	var cursor_y = playfield.get_node( "low-gui/cursor" ).get_pos( ).y
 	
 	# We compute the top and bottom Y position.
 	var top = get_pos( ).y - ( get_texture( ).get_size( ).y * get_scale( ).y / 2 )

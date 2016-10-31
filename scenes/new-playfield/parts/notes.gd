@@ -123,3 +123,56 @@ func replace_notes( ):
 		
 		# And called the resized event.
 		n.on_playfield_resized( )
+
+
+
+
+### @brief Get the first alive note (the first not played note visible on the screen).
+###
+### @return The first alive note, or null.
+###
+func get_first_alive( ):
+	
+	# We iterate over the notes' node
+	for n in notes_holder.get_children( ):
+		
+		# If the note isn't played
+		if not n.played:
+			
+			# We return it.
+			return n
+	
+	# Otherwise, we return null.
+	return null
+
+
+
+
+### @brief Get the first note.
+###
+### @return The first note, or null.
+###
+func get_first( ):
+	
+	# If there are no notes
+	if list.size( ) == 0:
+		# We return null
+		return null
+	
+	# Otherwise, we return the first note.
+	return list[ 0 ]
+
+
+### @brief Get the last note.
+###
+### @return The last note, or null.
+###
+func get_last( ):
+	
+	# If there are no notes
+	if list.size( ) == 0:
+		# We return null
+		return null
+	
+	# Otherwise, we return the last note.
+	return list[ list.size( ) - 1 ]

@@ -86,6 +86,7 @@ func _ready( ):
 	
 	set_process( true )
 	set_fixed_process( true )
+	set_process_input( true )
 
 
 
@@ -98,3 +99,8 @@ func _process( dt ):
 func _fixed_process( dt ):
 	
 	logical.fixed_process( dt )
+
+
+func _input( ev ):
+	
+	logical.input( ev )
