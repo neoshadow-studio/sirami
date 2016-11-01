@@ -9,6 +9,7 @@ extends Reference
 
 
 
+const TrackSelect = preload( "res://scenes/track_select/track_select.tscn" )
 const ScoreScene = preload( "../score-scene/score-scene.tscn" )
 
 
@@ -71,4 +72,26 @@ func switch_to_score_scene( ):
 	
 	
 	# We switch to the score menu.
+	scene_switcher.switch_with_fade( playfield, ins )
+
+
+
+
+### @brief Switch to the track selection.
+###
+func switch_to_track_select( ):
+
+	# We create the track selection scene
+	var ins = TrackSelect.instance( )
+	
+	# We load the default background
+	var tex = preload( "res://resources/images/main_background.tex" )
+	# Set it and show the sirami logo.
+	playfield.background.define( tex )
+	playfield.background.show_logo( )
+	
+	# We stop the music if it is still playing.
+	playfield.music.stop( )
+	
+	# And switch to this scene.
 	scene_switcher.switch_with_fade( playfield, ins )

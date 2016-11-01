@@ -29,6 +29,9 @@ var playfield
 ### @brief Y position of the cursor.
 var cursor_position = 0.5
 
+### @brief Is the resume button was pressed in the pause popup ?
+var pause_resume_pressed = false
+
 
 
 
@@ -51,6 +54,11 @@ func _init( pf ):
 	# We connect the finished signal of the music player.
 	playfield.music.connect( "finished", self, "_on_music_finished" )
 	
+	# We connect the pause popup buttons.
+	playfield.get_node( "pause/resume" ).connect( "pressed", self, "_on_pause_resume_pressed" )
+	playfield.get_node( "pause/quit" ).connect( "pressed", self, "_on_pause_quit_pressed" )
+	playfield.get_node( "pause/animation" ).connect( "finished", self, "_on_pause_animation_finished" )
+	
 	# If we need to hide the background.
 	if settings.get_setting( "playfield", "hide_background", false ):
 		# We remove the background
@@ -69,6 +77,13 @@ func _init( pf ):
 ### @param dt : The delta-time.
 ###
 func process( dt ):
+	
+	# If the game is paused
+	if playfield.get_tree( ).is_paused( ):
+		
+		# We stop here
+		return
+	
 	
 	# We update the timeline progression.
 	_update_timeline_progress( )
@@ -90,6 +105,12 @@ func process( dt ):
 ###
 func fixed_process( dt ) :
 	
+	# If the game is paused
+	if playfield.get_tree( ).is_paused( ):
+		# We stop here
+		return
+	
+	
 	# We update the notes.
 	playfield.notes.fixed_process( dt )
 	
@@ -105,7 +126,43 @@ func fixed_process( dt ) :
 ###
 func input( ev ):
 	
+	# If the game is paused
+	if playfield.get_tree( ).is_paused( ):
+		
+		# We process the input in paused mode.
+		playfield.input.input_paused( ev )
+		# And stop here
+		return
+	
+	# We process the input.
 	playfield.input.input( ev )
+
+
+
+
+
+### @brief Pause the game.
+###
+func pause( ):
+	
+	# We pause the tree and the music
+	playfield.get_tree( ).set_pause( true )
+	playfield.music.set_paused( true )
+	# We play the show animation.
+	playfield.get_node( "pause/animation" ).play( "show" )
+
+
+### @brief Resume the game.
+###
+func unpause( ):
+	
+	# We disable the pause mode
+	playfield.get_tree( ).set_pause( false )
+	# We play the hide position of the pause popup
+	playfield.get_node( "pause/animation" ).play( "hide" )
+	# We disable the music clock
+	playfield.clocks.disable ( "music" )
+	pause_resume_pressed = true
 
 
 
@@ -400,3 +457,36 @@ func _on_skip_button_pressed( ):
 func _on_music_finished( ):
 	# We switch to the score scene.
 	playfield.transition.switch_to_score_scene( )
+
+
+
+
+### @brief Signal: `pause/resume.pressed`
+###
+func _on_pause_resume_pressed( ):
+	
+	# We resume the game.
+	unpause( )
+
+
+### @brief Signal: `pause/quit.pressed`
+###
+func _on_pause_quit_pressed( ):
+	
+	playfield.get_tree( ).set_pause( false )
+	# We switch to the track selection scene.
+	playfield.transition.switch_to_track_select( )
+
+
+### @brief Signal: `pause/animation.finished`
+###
+func _on_pause_animation_finished( ):
+	
+	# If the resume button was pressed
+	if pause_resume_pressed:
+		
+		# We reset the value
+		pause_resume_pressed = false
+		# We resume the music and the clock.
+		playfield.music.set_paused( false )
+		playfield.clocks.enable( "music" )

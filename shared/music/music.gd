@@ -42,6 +42,7 @@ func _ready():
 func reset( ):
 	
 	last_playhead = 0
+	clocks.set_time( "music", 0 )
 
 
 
@@ -53,6 +54,7 @@ func reset( ):
 func play( pos=0 ):
 	
 	last_playhead = pos
+	clocks.enable( "music" )
 	.play( pos )
 
 
@@ -63,6 +65,7 @@ func play( pos=0 ):
 func seek_pos( pos ):
 	
 	last_playhead = pos
+	clocks.set_time( "music", pos )
 	.seek_pos( pos )
 
 

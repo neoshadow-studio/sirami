@@ -70,9 +70,18 @@ func fixed_process( dt ):
 func input( ev ):
 	
 	# We check if space is pressed for the skip
-	if ev.type == InputEvent.KEY and ev.scancode == KEY_SPACE and playfield.logical.can_skip( ):
+	if ev.type == InputEvent.KEY and ev.scancode == KEY_SPACE and ev.is_pressed( ) and playfield.logical.can_skip( ):
 		# We skip
 		playfield.logical.skip( )
+	
+	
+	# If the pause is pressed
+	if ev.is_action_pressed( "pause" ):
+		
+		# We tells the logical part
+		playfield.logical.pause( )
+		# And stop here
+		return
 	
 	
 	# If we are not in auto mode
@@ -82,6 +91,19 @@ func input( ev ):
 		if key_or_button_pressed( ev ):
 			# We notify the logical part
 			playfield.logical.on_key_pressed( )
+
+
+### @brief Process input in pause mode.
+###
+### @param ev : The input event.
+###
+func input_paused( ev ):
+	
+	# If the pause button is pressed
+	if ev.is_action_pressed( "pause" ):
+		# We resume the game.
+		playfield.logical.unpause( )
+
 
 
 
