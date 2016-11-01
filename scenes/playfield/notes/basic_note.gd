@@ -152,9 +152,10 @@ func play( auto = false ):
 		else:
 			# We play the samples with the default volume
 			playfield.audio.play_samples( samples )
-		
-		# We emit the played signal
-		playfield.notes.emit_signal( "played", self, score )
+	
+	
+	# We emit the played signal
+	playfield.notes.emit_signal( "played", self, score )
 	
 	
 	# We add the score

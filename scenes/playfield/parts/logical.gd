@@ -308,7 +308,7 @@ func _on_note_played( note, score ):
 	
 	
 	# If the sirami logo isn't hide
-	if not settings.get_setting( "playfield", "hide_sirami", false ):
+	if not settings.get_setting( "playfield", "hide_sirami", false ) and score != 0:
 		
 		# We firstly apply the brighting effect on the logo
 		playfield.visual.apply_color_tween_on_sirami_logo( intensity )
