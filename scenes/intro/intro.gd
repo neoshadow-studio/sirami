@@ -65,6 +65,12 @@ func _input( ev ):
 	if ev.type == InputEvent.MOUSE_BUTTON and ev.is_pressed( ) and ev.button_index == BUTTON_LEFT and not exited:
 		# We advance the animation to finish it now.
 		get_node( "anim" ).advance( 4 )
+	
+	
+	# If the escape key is pressed
+	if ev.is_action_pressed( "pause" ):
+		# We advance the animation to finish it now.
+		get_node( "anim" ).advance( 4 )
 
 
 

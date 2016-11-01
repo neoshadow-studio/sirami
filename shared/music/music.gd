@@ -12,8 +12,9 @@ extends StreamPlayer
 
 
 ### @brief The clocks.
-###
 onready var clocks = get_node( "/root/clocks" )
+### @brief The settings manager.
+onready var settings = get_node( "/root/settings" )
 
 
 
@@ -30,6 +31,9 @@ func _ready():
 	
 	# We add the clock "music"
 	clocks.add_clock( "music" )
+	
+	# We connect the changed signal.
+	settings.connect( "changed", self, "_on_setting_changed" )
 	
 	# And enable the fixed process.
 	set_fixed_process( true )
@@ -84,3 +88,18 @@ func _fixed_process( dt ):
 		clocks.set_time( "music", ( clocks.get_time( "music" ) + get_pos( ) ) / 2 )
 		# And we keep the new position.
 		last_playhead = get_pos( )
+
+
+### @brief Signal: `settings.changed`
+###
+func _on_setting_changed( section, name, new_value, old_value ):
+	
+	# If an audio setting was changed
+	if section == "audio":
+		
+		# we compute the music volume
+		var new_vol = settings.get_setting( "audio", "global_volume" )
+		new_vol *= settings.get_setting( "audio", "music_volume" ) 
+		
+		# And set it.
+		set_volume( new_vol )

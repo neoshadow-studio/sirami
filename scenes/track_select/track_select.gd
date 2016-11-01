@@ -52,6 +52,9 @@ func _ready():
 	else:
 		# We directly shows the tracks from the database.
 		_on_database_updated( )
+	
+	# We enable the process input.
+	set_process_input( true )
 
 
 
@@ -180,6 +183,19 @@ func _on_resized( ):
 		grid.set_columns( n - 1 )
 
 
+
+
+### @brief Process the input event.
+###
+### @param ev : The input event.
+###
+func _input( ev ):
+	
+	# If the escape key is pressed
+	if ev.is_action_pressed( "pause" ):
+		
+		# We emulate a click on the back button.
+		_on_back_pressed( )
 
 
 ### @brief Signal: `back.pressed`

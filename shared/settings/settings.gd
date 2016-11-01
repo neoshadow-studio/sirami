@@ -115,7 +115,7 @@ func get_setting( section, name, def=null ):
 ### @param name : The setting's name.
 ### @param value : The setting's value.
 ###
-func set_settings( section, name, value ):
+func set_setting( section, name, value ):
 	
 	if not settings.has( section ):
 		

@@ -132,6 +132,29 @@ func _input( ev ):
 		p_10 = scores[ "10" ]
 		missed = scores.missed
 		max_combo = scores.combo
+	
+	
+	# If the escape key is pressed and the tween isn't finish
+	if ev.is_action_pressed( "pause" ) and tween.is_active( ):
+		
+		# We stop the tween.
+		tween.stop_all( )
+		
+		# We set all the showed value to their maximums
+		score = scores.score
+		acc = scores.accuracy
+		p_100 = scores[ "100" ]
+		p_50 = scores[ "50" ]
+		p_10 = scores[ "10" ]
+		missed = scores.missed
+		max_combo = scores.combo
+	
+	
+	# If the escape key is pressed and the tween is finish
+	if ev.is_action_pressed( "pause" ) and not tween.is_active( ):
+		
+		# We emulate a click on the quit button
+		_on_quit_pressed( )
 
 
 

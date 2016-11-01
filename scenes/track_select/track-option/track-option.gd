@@ -110,6 +110,9 @@ func _ready():
 		
 		# And we set the duration label.
 		n_duration.set_text( "Duration : %d:%d" % [mins, seconds] )
+	
+	# We enable the process input.
+	set_process_input( true )
 
 
 
@@ -156,6 +159,18 @@ func _on_anim_finished():
 		get_parent( ).remove_child( self )
 
 
+
+
+### @brief Process the input event.
+###
+### @param ev : The input event.
+###
+func _input( ev ):
+	
+	# If the escape key is pressed.
+	if ev.is_action_pressed( "pause" ):
+		# We emulate a click on the back button.
+		_on_back_pressed( )
 
 
 ### @brief Signal: `bacl.pressed`
