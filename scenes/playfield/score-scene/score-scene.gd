@@ -199,5 +199,14 @@ func _on_quit_pressed():
 	# We create the track selection scene
 	var ins = TrackSelect.instance( )
 	
+	# We load the default background
+	var tex = preload( "res://resources/images/main_background.tex" )
+	# Set it and show the sirami logo.
+	background.define( tex )
+	background.show_logo( )
+	
+	# We stop the music if it is still playing.
+	get_node( "/root/music" ).stop( )
+	
 	# And switch to this scene.
 	scene_switcher.switch_with_fade( self, ins )

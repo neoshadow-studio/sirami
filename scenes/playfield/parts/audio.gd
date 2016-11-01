@@ -160,7 +160,7 @@ func _start_music( ):
 	
 	# We set the music's stream and play it.
 	playfield.music.set_stream( stream )
-	playfield.music.play( )
+	playfield.music.play( 300 )
 
 
 

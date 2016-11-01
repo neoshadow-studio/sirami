@@ -71,4 +71,4 @@ func switch_to_score_scene( ):
 	
 	
 	# We switch to the score menu.
-	scene_switcher.switch_with_fade( self, ins )
+	scene_switcher.switch_with_fade( playfield, ins )

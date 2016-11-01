@@ -165,7 +165,7 @@ func apply_scale_tween_on_sirami_logo( intensity ):
 
 ### @brief Apply the bright effect on the cursor.
 ###
-func apply_color_effet_on_cursor( ):
+func apply_color_effect_on_cursor( ):
 	
 	# We just starts the animation player.
 	playfield.get_node( "low-gui/cursor/animation" ).play( "click" )

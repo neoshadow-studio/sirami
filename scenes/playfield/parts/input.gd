@@ -75,10 +75,13 @@ func input( ev ):
 		playfield.logical.skip( )
 	
 	
-	# If a key or a button is pressed
-	if key_or_button_pressed( ev ):
-		# We notify the logical part
-		playfield.logical.on_key_pressed( )
+	# If we are not in auto mode
+	if not playfield.mods.auto_mode:
+	
+		# If a key or a button is pressed
+		if key_or_button_pressed( ev ):
+			# We notify the logical part
+			playfield.logical.on_key_pressed( )
 
 
 

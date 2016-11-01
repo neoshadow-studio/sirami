@@ -48,6 +48,8 @@ func _init( pf ):
 	
 	# We connect the pressed signal of the skip button.
 	playfield.get_node( "high-gui/skip" ).connect( "pressed", self, "_on_skip_button_pressed" )
+	# We connect the finished signal of the music player.
+	playfield.music.connect( "finished", self, "_on_music_finished" )
 	
 	# If we need to hide the background.
 	if settings.get_setting( "playfield", "hide_background", false ):
@@ -166,13 +168,16 @@ func can_skip( ):
 ###
 func skip( ):
 	
-	# If we are after the first note's time.
+	# If we are before the first note's time.
 	if playfield.time.get_time( ) < playfield.notes.get_first( ).time:
 		# We skip to 3 sec before the first note.
 		playfield.music.play( playfield.notes.get_first( ).time - 3 )
 	
 	
-	# TODO: Skip to score menu
+	# If we are after the last note's time.
+	if playfield.time.get_time( ) > playfield.notes.get_last( ).time:
+		# We switch to the score scene.
+		playfield.transition.switch_to_score_scene( )
 
 
 
@@ -386,6 +391,12 @@ func _update_skip_button( ):
 ### @brief Signal: `high-gui/skip.pressed`
 ###
 func _on_skip_button_pressed( ):
-	
 	# We skip
 	skip( )
+
+
+### @brief Signal : `music.finished`
+###
+func _on_music_finished( ):
+	# We switch to the score scene.
+	playfield.transition.switch_to_score_scene( )

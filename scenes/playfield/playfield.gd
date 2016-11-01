@@ -44,6 +44,10 @@ var background
 
 ### @brief The track to play.
 var track = null
+### @brief The mods options.
+var mods_options = {
+	"auto_mod": false
+}
 
 ### @brief The visual part.
 var visual

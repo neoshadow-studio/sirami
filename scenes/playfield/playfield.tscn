@@ -11,8 +11,7 @@
 [ext_resource path="res://resources/samples/normal-hitnormal.smp" type="Sample" id=9]
 [ext_resource path="res://resources/samples/normal-hitwhistle.smp" type="Sample" id=10]
 
-
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=1]
 
 resource/name = "click"
 length = 0.3
@@ -24,7 +23,7 @@ tracks/0/interp = 1
 tracks/0/imported = false
 tracks/0/keys = { "times":FloatArray( 0, 0.3 ), "transitions":FloatArray( 0.25, 1 ), "update":0, "values":[ Color( 1, 1, 1, 1 ), Color( 0.705882, 0.705882, 0.705882, 1 ) ] }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=2]
 
 resource/name = "increase"
 length = 0.3
@@ -34,9 +33,9 @@ tracks/0/type = "value"
 tracks/0/path = NodePath(".:rect/scale")
 tracks/0/interp = 1
 tracks/0/imported = false
-tracks/0/keys = { "times":FloatArray( 0, 0.3 ), "transitions":FloatArray( 0.25, 1 ), "update":0, "values":[ Vector2( 1, 1.5 ), Vector2( 1, 1 ) ] }
+tracks/0/keys = { "times":FloatArray( 0, 0.3 ), "transitions":FloatArray( 0.25, 1 ), "update":0, "values":[ Vector2( 1, 1.8 ), Vector2( 1, 1 ) ] }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=3]
 
 resource/name = "miss"
 length = 0.3
@@ -48,9 +47,8 @@ tracks/0/interp = 1
 tracks/0/imported = false
 tracks/0/keys = { "times":FloatArray( 0, 0.3 ), "transitions":FloatArray( 0.25, 1 ), "update":0, "values":[ Color( 1, 0, 0, 1 ), Color( 1, 1, 1, 1 ) ] }
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=4]
 
-resource/name = "hide"
 length = 0.5
 loop = false
 step = 0.1
@@ -65,9 +63,8 @@ tracks/1/interp = 1
 tracks/1/imported = false
 tracks/1/keys = { "times":FloatArray( 0.5 ), "transitions":FloatArray( 1 ), "values":[ { "args":[  ], "method":"hide" } ] }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=5]
 
-resource/name = "show"
 length = 0.5
 loop = false
 step = 0.1
@@ -82,7 +79,7 @@ tracks/1/interp = 1
 tracks/1/imported = false
 tracks/1/keys = { "times":FloatArray( 0 ), "transitions":FloatArray( 1 ), "values":[ { "args":[  ], "method":"show" } ] }
 
-[sub_resource type="SampleLibrary" id=1]
+[sub_resource type="SampleLibrary" id=6]
 
 samples/clap = { "db":0.0, "pitch":1.0, "sample":ExtResource( 7 ) }
 samples/finish = { "db":0.0, "pitch":1.0, "sample":ExtResource( 8 ) }
@@ -159,7 +156,7 @@ texture = ExtResource( 5 )
 playback/process_mode = 1
 playback/default_blend_time = 0.0
 root/root = NodePath("..")
-anims/click = SubResource( 6 )
+anims/click = SubResource( 1 )
 playback/active = true
 playback/speed = 1.0
 blend_times = [  ]
@@ -249,8 +246,8 @@ max_lines_visible = -1
 playback/process_mode = 1
 playback/default_blend_time = 0.0
 root/root = NodePath("..")
-anims/increase = SubResource( 4 )
-anims/miss = SubResource( 5 )
+anims/increase = SubResource( 2 )
+anims/miss = SubResource( 3 )
 playback/active = true
 playback/speed = 1.0
 blend_times = [  ]
@@ -300,8 +297,8 @@ invert/border = 100.0
 playback/process_mode = 1
 playback/default_blend_time = 0.0
 root/root = NodePath("..")
-anims/hide = SubResource( 2 )
-anims/show = SubResource( 3 )
+anims/hide = SubResource( 4 )
+anims/show = SubResource( 5 )
 playback/active = true
 playback/speed = 1.0
 blend_times = [  ]
@@ -310,7 +307,7 @@ autoplay = ""
 [node name="samples" type="SamplePlayer" parent="."]
 
 config/polyphony = 16
-config/samples = SubResource( 1 )
+config/samples = SubResource( 6 )
 default/volume_db = 0.0
 default/pitch_scale = 1.0
 default/pan = 0.0

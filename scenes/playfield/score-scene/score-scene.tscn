@@ -486,3 +486,7 @@ enabled_focus_mode = 2
 shortcut = null
 text = "Quit"
 flat = true
+
+[connection signal="pressed" from="quit" to="." method="_on_quit_pressed"]
+
+

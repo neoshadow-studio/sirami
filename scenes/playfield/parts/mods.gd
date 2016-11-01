@@ -18,7 +18,7 @@ const Auto = preload( "../mods/auto.gd" )
 var playfield
 
 ### @brief Auto-mode.
-var auto_mode = true
+var auto_mode = false
 
 ### @brief The auto mod.
 var auto_mod = null
@@ -33,6 +33,9 @@ var auto_mod = null
 func _init( pf ):
 	
 	playfield = pf
+	
+	# We get the mods options.
+	auto_mode = playfield.mods_options.auto_mod
 	
 	# If the auto mode is started
 	if auto_mode:

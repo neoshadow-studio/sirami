@@ -29,7 +29,7 @@ func _ready():
 ###
 ### @param texture : The new background texture.
 ###
-func define( texture ):
+func define( texture, instant=false ):
 	
 	var current
 	
@@ -64,20 +64,31 @@ func define( texture ):
 		new.set_z( -101 )
 	
 	
-	# We create the fade in tween, set its name and add it to the node.
-	var fade_in_tween = Tween.new( )
-	fade_in_tween.set_name( "fade-in" )
-	add_child( fade_in_tween )
+	if not instant:
+		
+		# We create the fade in tween, set its name and add it to the node.
+		var fade_in_tween = Tween.new( )
+		fade_in_tween.set_name( "fade-in" )
+		add_child( fade_in_tween )
+		
+		# We connect the tween complete signal
+		fade_in_tween.connect( "tween_complete", self, "_on_fade_in_tween_completed" )
+		
+		# We interpolate the new sprite's opacity.
+		fade_in_tween.interpolate_property( new, "visibility/opacity", \
+			0, 1, 1, Tween.TRANS_SINE, Tween.EASE_OUT )
+		
+		# We start the fade in tween.
+		fade_in_tween.start( )
 	
-	# We connect the tween complete signal
-	fade_in_tween.connect( "tween_complete", self, "_on_fade_in_tween_completed" )
-	
-	# We interpolate the new sprite's opacity.
-	fade_in_tween.interpolate_property( new, "visibility/opacity", \
-		0, 1, 1, Tween.TRANS_SINE, Tween.EASE_OUT )
-	
-	# We start the fade in tween.
-	fade_in_tween.start( )
+	else:
+		
+		if current != null:
+			
+			current.queue_free( )
+			remove_child( current )
+		
+		new.set_opacity( 1 )
 	
 	# We update the position and the scale of the sprite(s).
 	_update_pos_and_scale( )
@@ -149,16 +160,19 @@ func show_logo( instant=false ):
 
 ### @brief Hide the logo.
 ###
-func hide_logo( ):
+func hide_logo( instant=false ):
 	
 	# Get the logo and the animation player
 	var logo = get_node( "sirami-logo" )
 	var anim = logo.get_node( "animation" )
 	
 	# If the logo visible
-	if logo.is_visible( ):
+	if logo.is_visible( ) and not instant:
 		# We play the hide animation.
 		anim.play( "hide" )
+	
+	if instant:
+		logo.hide( )
 
 
 
