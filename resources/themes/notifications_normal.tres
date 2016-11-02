@@ -1,0 +1,33 @@
+[gd_resource type="Theme" load_steps=4 format=1]
+
+[ext_resource path="res://resources/fonts/Oxygen.otf" type="DynamicFontData" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+
+content_margin/left = -1.0
+content_margin/right = -1.0
+content_margin/top = -1.0
+content_margin/bottom = -1.0
+bg_color = Color( 0, 0.0986938, 0.164063, 1 )
+light_color = Color( 0, 0.12207, 0.3125, 1 )
+dark_color = Color( 0, 0.121569, 0.309804, 1 )
+border_size = 3
+border_blend = false
+draw_bg = true
+
+[sub_resource type="DynamicFont" id=2]
+
+font/size = 16
+extra_spacing/top = -8
+extra_spacing/bottom = -8
+font/use_mipmaps = false
+font/use_filter = true
+font/font = ExtResource( 1 )
+
+[resource]
+
+default_font = SubResource( 2 )
+Panel/styles/panel = SubResource( 1 )
+Panel/styles/panelf = SubResource( 1 )
+Panel/styles/panelnc = SubResource( 1 )
+

@@ -80,6 +80,8 @@ func _on_score_changed( ):
 	var anim = combo.get_node( "animation" )
 	anim.play( "increase" )
 	
+	# We reset the font color
+	combo.add_color_override( "font_color", Color( 1, 1, 1 ) )
 	
 	# And set the accuracy and combo label.
 	accuracy.set_text( "%d" % ( playfield.score.accuracy * 100 ) )

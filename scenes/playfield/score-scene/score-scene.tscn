@@ -1,49 +1,50 @@
-[gd_scene load_steps=9 format=1]
+[gd_scene load_steps=10 format=1]
 
-[ext_resource path="res://scenes/playfield/score-scene/score-scene.gd" type="Script" id=1]
-[ext_resource path="res://resources/fonts/topo.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://resources/themes/options.tres" type="Theme" id=1]
+[ext_resource path="res://scenes/playfield/score-scene/score-scene.gd" type="Script" id=2]
+[ext_resource path="res://resources/fonts/topo.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 
 font/size = 48
 font/use_mipmaps = false
 font/use_filter = false
-font/font = ExtResource( 2 )
+font/font = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=2]
 
 font/size = 32
 font/use_mipmaps = false
 font/use_filter = false
-font/font = ExtResource( 2 )
+font/font = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=3]
 
 font/size = 48
 font/use_mipmaps = false
 font/use_filter = false
-font/font = ExtResource( 2 )
+font/font = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=4]
 
 font/size = 32
 font/use_mipmaps = false
 font/use_filter = false
-font/font = ExtResource( 2 )
+font/font = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=5]
 
 font/size = 32
 font/use_mipmaps = false
 font/use_filter = false
-font/font = ExtResource( 2 )
+font/font = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=6]
 
 font/size = 32
 font/use_mipmaps = false
 font/use_filter = false
-font/font = ExtResource( 2 )
+font/font = ExtResource( 3 )
 
 [node name="score-menu" type="Container"]
 
@@ -53,11 +54,12 @@ focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
+theme/theme = ExtResource( 1 )
 margin/left = 0.0
 margin/top = 0.0
 margin/right = 0.0
 margin/bottom = 0.0
-script/script = ExtResource( 1 )
+script/script = ExtResource( 2 )
 
 [node name="title" type="Label" parent="."]
 

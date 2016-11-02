@@ -1,21 +1,23 @@
-[gd_scene load_steps=5 format=1]
+[gd_scene load_steps=6 format=1]
 
-[ext_resource path="res://scenes/options/options.gd" type="Script" id=1]
-[ext_resource path="res://resources/fonts/topo.ttf" type="DynamicFontData" id=2]
-
-[sub_resource type="DynamicFont" id=2]
-
-font/size = 32
-font/use_mipmaps = false
-font/use_filter = false
-font/font = ExtResource( 2 )
+[ext_resource path="res://resources/themes/options.tres" type="Theme" id=1]
+[ext_resource path="res://scenes/options/options.gd" type="Script" id=2]
+[ext_resource path="res://resources/fonts/topo.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="DynamicFont" id=1]
+
+font/size = 32
+extra_spacing/bottom = -8
+font/use_mipmaps = false
+font/use_filter = false
+font/font = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
 
 font/size = 24
 font/use_mipmaps = false
 font/use_filter = false
-font/font = ExtResource( 2 )
+font/font = ExtResource( 3 )
 
 [node name="options" type="Control"]
 
@@ -25,11 +27,12 @@ focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
+theme/theme = ExtResource( 1 )
 margin/left = 0.0
 margin/top = 0.0
 margin/right = 0.0
 margin/bottom = 0.0
-script/script = ExtResource( 1 )
+script/script = ExtResource( 2 )
 
 [node name=" background" type="Panel" parent="."]
 
@@ -57,7 +60,7 @@ margin/left = 16.0
 margin/top = 95.0
 margin/right = 244.0
 margin/bottom = 16.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 1, 0, 1, 1 )
 toggle_mode = false
 enabled_focus_mode = 2
@@ -119,7 +122,7 @@ margin/left = 16.0
 margin/top = 8.0
 margin/right = 16.0
 margin/bottom = 0.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Audio"
 align = 2
 valign = 1
@@ -163,9 +166,9 @@ focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
 margin/left = 300.0
-margin/top = 0.0
+margin/top = 3.0
 margin/right = 64.0
-margin/bottom = 16.0
+margin/bottom = 11.0
 range/min = 0.0
 range/max = 1.0
 range/step = 0.01
@@ -231,9 +234,9 @@ focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
 margin/left = 300.0
-margin/top = 0.0
+margin/top = 3.0
 margin/right = 64.0
-margin/bottom = 16.0
+margin/bottom = 11.0
 range/min = 0.0
 range/max = 1.0
 range/step = 0.01
@@ -242,7 +245,7 @@ range/value = 1.0
 range/exp_edit = false
 range/rounded = false
 tick_count = 0
-ticks_on_borders = true
+ticks_on_borders = false
 focus_mode = 2
 
 [node name="text" type="Label" parent="scroll/vbox/samples"]
@@ -299,9 +302,9 @@ focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
 margin/left = 300.0
-margin/top = 0.0
+margin/top = 3.0
 margin/right = 64.0
-margin/bottom = 16.0
+margin/bottom = 11.0
 range/min = 0.0
 range/max = 1.0
 range/step = 0.01
@@ -355,7 +358,7 @@ margin/left = 16.0
 margin/top = 8.0
 margin/right = 16.0
 margin/bottom = 0.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Playfield"
 align = 2
 valign = 1
@@ -383,8 +386,8 @@ size_flags/horizontal = 2
 size_flags/vertical = 2
 margin/left = 0.0
 margin/top = 0.0
-margin/right = 76.0
-margin/bottom = 22.0
+margin/right = 189.0
+margin/bottom = 21.0
 toggle_mode = true
 enabled_focus_mode = 2
 shortcut = null
@@ -403,7 +406,7 @@ size_flags/vertical = 2
 margin/left = 300.0
 margin/top = 0.0
 margin/right = 0.0
-margin/bottom = 23.0
+margin/bottom = 21.0
 toggle_mode = true
 enabled_focus_mode = 2
 shortcut = null
@@ -435,7 +438,7 @@ margin/left = 16.0
 margin/top = 8.0
 margin/right = 16.0
 margin/bottom = 0.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Keys"
 align = 2
 valign = 1
@@ -462,9 +465,9 @@ focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
 margin/left = 0.0
-margin/top = 0.0
-margin/right = 40.0
-margin/bottom = 14.0
+margin/top = 4.0
+margin/right = 55.0
+margin/bottom = 16.0
 text = "Left Key"
 percent_visible = 1.0
 lines_skipped = 0
@@ -479,9 +482,9 @@ focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
 margin/left = 150.0
-margin/top = 0.0
+margin/top = 2.0
 margin/right = 0.0
-margin/bottom = 20.0
+margin/bottom = 22.0
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
@@ -507,9 +510,9 @@ focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
 margin/left = 0.0
-margin/top = 0.0
-margin/right = 40.0
-margin/bottom = 14.0
+margin/top = 9.0
+margin/right = 66.0
+margin/bottom = 21.0
 text = "Right Key"
 percent_visible = 1.0
 lines_skipped = 0
@@ -526,7 +529,7 @@ size_flags/vertical = 2
 margin/left = 150.0
 margin/top = 0.0
 margin/right = 0.0
-margin/bottom = 20.0
+margin/bottom = 18.0
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
