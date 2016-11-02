@@ -59,6 +59,7 @@ func play( pos=0 ):
 	
 	last_playhead = pos
 	clocks.enable( "music" )
+	clocks.set_time( "music", pos )
 	.play( pos )
 
 
@@ -80,6 +81,12 @@ func seek_pos( pos ):
 ### @param dt : The delta-time.
 ###
 func _fixed_process( dt ):
+	
+	# If we are not playing
+	if not is_playing( ):
+		# We do nothing
+		return
+	
 	
 	# If the stream has changed its position.
 	if get_pos( ) != last_playhead:

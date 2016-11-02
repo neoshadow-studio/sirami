@@ -473,6 +473,13 @@ func _on_pause_resume_pressed( ):
 ###
 func _on_pause_quit_pressed( ):
 	
+	# We stop the music.
+	playfield.music.set_paused( false )
+	playfield.music.stop( )
+	playfield.music.seek_pos( 0 )
+	playfield.music.set_stream( null )
+	
+	
 	playfield.get_tree( ).set_pause( false )
 	# We switch to the track selection scene.
 	playfield.transition.switch_to_track_select( )

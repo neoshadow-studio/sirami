@@ -110,7 +110,7 @@ func remove( ):
 	
 	
 	# If there are an actual background
-	if has( "current" ):
+	if has_node( "current" ):
 		
 		# We get it 
 		var current = get_node( "current" )
@@ -232,7 +232,7 @@ func _update_pos_and_scale_for( node ):
 	var scale = screen_size / tex_size
 	
 	# We keep the aspect ratio while filling the whole screen
-	if scale.x < scale.y:
+	if scale.x > scale.y:
 		scale.y = scale.x
 	
 	else:
@@ -248,7 +248,6 @@ func _update_pos_and_scale_for( node ):
 ### @brief Signal: `get_tree().screen_resized`
 ###
 func _on_screen_resized( ):
-	
 	# We update the position and the scale of the background elements.
 	_update_pos_and_scale( )
 

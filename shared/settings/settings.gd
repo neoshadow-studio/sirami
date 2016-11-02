@@ -19,13 +19,20 @@ const IniStream = preload( "res://data/ini_stream.gd" )
 var settings = {
 	"playfield": {
 		"hide_background": false,
-		"hide_sirami": false
+		"hide_sirami": false,
+		"visual_offset": 0,
+		"time_offset": 0
 	},
 	
 	"audio": {
 		"global_volume": 1,
 		"samples_volume": 1,
 		"music_volume": 1
+	},
+	
+	"keys": {
+		"left": KEY_W,
+		"right": KEY_X
 	}
 }
 
@@ -55,6 +62,38 @@ func _ready( ):
 		
 		# We save it.
 		settings = data
+	
+	# We reload the keys.
+	reload_keys( )
+
+
+
+
+### @brief Reloads the keys.
+###
+func reload_keys( ):
+	
+	# We remove the actions
+	InputMap.erase_action( "key_1" )
+	InputMap.erase_action( "key_2" )
+	
+	# We re-add them
+	InputMap.add_action( "key_1" )
+	InputMap.add_action( "key_2" )
+	
+	# We create the input event for the first key
+	var k1 = InputEvent( )
+	k1.type = InputEvent.KEY
+	k1.scancode = settings.keys.left
+	
+	# We create the input event for the second key
+	var k2 = InputEvent( )
+	k2.type = InputEvent.KEY
+	k2.scancode = settings.keys.right
+	
+	# We add the events to the actions.
+	InputMap.action_add_event( "key_1", k1 )
+	InputMap.action_add_event( "key_2", k2 )
 
 
 

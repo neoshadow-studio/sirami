@@ -34,6 +34,8 @@ onready var last_text = get_node( "control/text-global" )
 
 ### @brief The mouse is in the root control ?
 onready var mouse_in = false
+### @brief Receive the inputs ?
+onready var enabled = true
 
 
 
@@ -52,6 +54,8 @@ func _ready():
 	samples_l.set_text( "%d %%" % ( samples.get_value( ) * 100 ) )
 	music_l.set_text( "%d %%" % ( music.get_value( ) * 100 ) )
 	
+	settings.connect( "changed", self, "_on_setting_changed" )
+	
 	# We enable the input process.
 	set_process_input( true )
 
@@ -63,6 +67,12 @@ func _ready():
 ### @param ev : The input event.
 ###
 func _input( ev ):
+	
+	# We the controller isn't enabled
+	if not enabled:
+		# We do nothing.
+		return
+	
 	
 	# If the volume up or the volume down action is pressed
 	if ev.is_action_pressed( "volume_up" ) or ev.is_action_pressed( "volume_down" ):
@@ -160,6 +170,26 @@ func _on_music_value_changed( value ):
 	
 	settings.set_setting( "audio", "music_volume", value )
 	music_l.set_text( "%d %%" % ( value * 100 ) )
+
+
+
+
+### @brief Signal: `settings.changed`
+###
+func _on_setting_changed( section, name, new_value, old_value ):
+	
+	# If a volume was changed
+	if section == "audio":
+		
+			# We set the starting value of the volumes.
+			global.set_value( settings.get_setting( "audio", "global_volume", 1 ) )
+			samples.set_value( settings.get_setting( "audio", "samples_volume", 1 ) )
+			music.set_value( settings.get_setting( "audio", "music_volume", 1 ) )
+			
+			# We set the texts of the volumes.
+			global_l.set_text( "%d %%" % ( global.get_value( ) * 100 ) )
+			samples_l.set_text( "%d %%" % ( samples.get_value( ) * 100 ) )
+			music_l.set_text( "%d %%" % ( music.get_value( ) * 100 ) )
 
 
 

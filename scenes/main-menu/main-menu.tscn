@@ -140,7 +140,7 @@ margin/top = 0.3
 margin/right = 0.2
 margin/bottom = 0.3
 script/script = ExtResource( 2 )
-next_scene = ""
+next_scene = "res://scenes/options/options.tscn"
 start_angle = 270.0
 end_angle = 230.0
 
